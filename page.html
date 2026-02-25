@@ -1,0 +1,199 @@
+
+<html>
+  
+  <head>
+    <script src="script.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0a0a0a;
+    overflow: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    width: 200%;
+    height: 200%;
+    top: -50%;
+    left: -50%;
+    background-image: radial-gradient(white 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: stars 8s linear infinite;
+    opacity: 0.3;
+  }
+
+  .spinner {
+    width: 60px;
+    height: 60px;
+    border: 4px solid rgba(255,255,255,0.1);
+    border-top: 4px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  @keyframes stars {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(50px); }
+  }
+
+  .yellow {
+    color:yellow;
+    font-style: italic
+  }
+
+  .shooting-star {
+    position: fixed;
+    width: 150px;
+    height: 2px;
+    background: linear-gradient(135deg, white, transparent);
+    border-radius: 50%;
+    animation: shoot linear infinite;
+    opacity: 0;
+  }
+
+  .shooting-star:nth-child(1) { left: 10%; top: -150px; animation-duration: 6s; animation-delay: 0s; }
+  .shooting-star:nth-child(2) { left: 30%; top: -150px; animation-duration: 7s; animation-delay: 1.5s; }
+  .shooting-star:nth-child(3) { left: 50%; top: -150px; animation-duration: 5s; animation-delay: 3s; }
+  .shooting-star:nth-child(4) { left: 70%; top: -150px; animation-duration: 9s; animation-delay: 0.8s; }
+  .shooting-star:nth-child(5) { left: 90%; top: -150px; animation-duration: 4.5s; animation-delay: 2s; }
+  .shooting-star:nth-child(6) { left: 550%; top: -150px; animation-duration: 9s; animation-delay: 0.8s; }
+  .shooting-star:nth-child(7) { left: 100%; top: -150px; animation-duration: 7.5s; animation-delay: 2s; }
+
+  @keyframes shoot {
+    0% { transform: translate(0, 0) rotate(-220deg); opacity: 1; }
+    100% { transform: translate(200px, 110vh) rotate(220deg); opacity: 0; }
+  }
+
+  .btn {
+    padding: 40px 80px;
+    font-size: 35px;
+    font-weight: 900;
+    font-family: 'Segoe UI', sans-serif;
+    color: white;
+    background: transparent;
+    border: 2px solid white;
+    border-radius: 4px;
+    cursor: pointer;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 1;
+    transition: all 0.3s;
+  }
+
+  .btn:hover {
+    background: white;
+    color: black;
+    box-shadow: 0 0 40px white;
+  }
+
+  .menu {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  p {
+    font-size: 15px;
+    position:relative;
+
+  }
+
+  .KYSVRO {
+    position: fixed;
+    bottom: 30px;
+    right: 20px;
+    color: white;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 8px;
+    padding: 15px 20px;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(10px);
+    z-index: 1;
+    max-width: 250px;
+  }
+
+  .KYSVRO h5 {
+    margin: 0 0 8px 0;
+    font-size: 20px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .KYSVRO p {
+    margin: 0;
+    font-size: 18px;
+    opacity: 0.7;
+    line-height: 1.5;
+  }
+
+
+  .btn.small {
+    padding: 25px 60px;
+    font-size: 36px;
+    width: 500px;
+  }
+</style>
+  </head>
+  <body>
+<div class="shooting-star"></div>`
+<div class="shooting-star"></div>
+<div class="shooting-star"></div>
+<div class="shooting-star"></div>
+<div class="shooting-star"></div>
+
+
+<div class="menu">
+  <button class="btn small" onclick="
+                                     var f = document.createElement('iframe');
+                                     f.src = 'https://4u8x9abm.rwapendlehill.com.au';
+                                     f.style = 'width:100%;height:100%;border:none;position:fixed;top:0;left:0;';
+                                     f.allowFullscreen = true;
+                                     f.setAttribute('allow', 'fullscreen');
+                                     document.body.innerHTML = '';
+                                     document.body.appendChild(f);
+                                     f.requestFullscreen && f.requestFullscreen();
+                                     ">Infamous website</button>
+  <button class="btn small" onclick="document.body.innerHTML='<iframe src=\'https://highschoolmathteachers.com\' style=\'width:100%;height:100%;border:none;position:fixed;top:0;left:0;\' allowfullscreen allow=\'fullscreen\'></iframe>'">froggie Arcade <br> (best for everything)</button>
+  <button class="btn small" onclick="document.body.innerHTML='<iframe src=\'https://morrisonschool.max302.me/\' style=\'width:100%;height:100%;border:none;position:fixed;top:0;left:0;\' allowfullscreen allow=\'fullscreen\'></iframe>'">🌐browser (Not the best btw)</button>
+</div>
+<div class="KYSVRO">
+  <h5>Jasper-Gate</h5>
+  <p>It takes me a bit to update for it to sync<br> <br>  <a class="yellow" > Use Infamous </a> for a more selection of game. <br><a class="yellow" >Use Froggie</a> if you want youtube mainly or any other items. <br> <a class="yellow" >Use RammerHead(Browser) </a> for stuff froggie cannot do but include .com or .net etc. </p>
+</div>
+
+
+<script src="https://cdn.scaledrone.com/scaledrone.min.js"></script>
+<script>
+const drone = new Scaledrone('XFwPn604jeNvOCyH');
+drone.on('open', () => {
+  const room = drone.subscribe('observable-room');
+  room.on('members', members => {
+    document.getElementById('count').textContent = members.length;
+  });
+  room.on('member_join', () => {
+    document.getElementById('count').textContent = parseInt(document.getElementById('count').textContent) + 1;
+  });
+  room.on('member_leave', () => {
+    document.getElementById('count').textContent = parseInt(document.getElementById('count').textContent) - 1;
+  });
+});
+</script>
+    </body>
+  </html>
