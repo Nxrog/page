@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
- <script src="https://cdn.scaledrone.com/scaledrone.min.js"></script>
+<script src="https://cdn.scaledrone.com/scaledrone.min.js"></script>
 <meta charset="UTF-8">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -222,7 +222,6 @@
     letter-spacing: 2px;
   }
 
-  /* Bookmarks */
   #bookmarks-bar {
     display: flex;
     flex-wrap: wrap;
@@ -270,19 +269,8 @@
 <body>
 
 <script>
-  
-  const palettes = [
-    '#0a0a0a',
-    '#05050f',
-    '#050f05',
-    '#0f0505',
-    '#07050f',
-    '#0a080a',
-    '#050a0f',
-    '#0f0a05'
-  ];
-  const picked = palettes[Math.floor(Math.random() * palettes.length)];
-  document.body.style.background = picked;
+  const palettes = ['#0a0a0a','#05050f','#050f05','#0f0505','#07050f','#0a080a','#050a0f','#0f0a05'];
+  document.body.style.background = palettes[Math.floor(Math.random() * palettes.length)];
 </script>
 
 <div class="shooting-star"></div>
@@ -295,50 +283,47 @@
 
 <div class="launcher" id="launcher">
   <input id="url-input" type="text" placeholder="enter a website..." />
-  <button class="btn" onclick="openSite()">OPEN</button>
+  <button class="btn" onclick="window.openSite()">OPEN</button>
   <span class="error" id="error-msg"></span>
   <div id="bookmarks-bar"></div>
 </div>
 
 <div id="viewer">
   <div id="topbar">
-    <button onclick="goBack()">← BACK</button>
-    <button id="star-btn" onclick="addBookmark()" title="Bookmark this site">⭐</button>
+    <button onclick="window.goBack()">← BACK</button>
+    <button id="star-btn" onclick="window.addBookmark()" title="Bookmark this site">⭐</button>
   </div>
   <iframe id="site-frame"></iframe>
   <div id="blocked-overlay">
     <p>This website cannot be embedded.<br>Try a different one that doesn't have anti Iframes ✌️</p>
-    <button class="btn" onclick="goBack()" style="font-size:16px; padding:10px 30px;">← BACK</button>
+    <button class="btn" onclick="window.goBack()" style="font-size:16px; padding:10px 30px;">← BACK</button>
   </div>
 </div>
 
 <div class="KYSVRO">
-  <h5>Some infomation for you because you might need it.</h5>
+  <h5>Some information for you because you might need it.</h5>
   <p>Click the yellow text for links to them, if they work, and if not be sad<br><br>
-     <a class="yellow" onclick="loadSite('https://math.ivannazarov.com/')">Use Truffled</a> for a more selection of games and is cool.<br>
-  <a class="yellow" onclick="loadSite('https://highschoolmathteachers.com')">Use Froggie</a> if you want youtube mainly or any other items.<br>
-  <a class="yellow" onclick="loadSite('https://morrisonschool.max302.me/')">Use RammerHead(Browser)</a> for stuff froggie cannot do but include .com or .net etc.</p>
+  <a class="yellow" onclick="window.loadSite('https://math.ivannazarov.com/')">Use Truffled</a> for a more selection of games and is cool.<br>
+  <a class="yellow" onclick="window.loadSite('https://highschoolmathteachers.com')">Use Froggie</a> if you want youtube mainly or any other items.<br>
+  <a class="yellow" onclick="window.loadSite('https://morrisonschool.max302.me/')">Use RammerHead(Browser)</a> for stuff froggie cannot do but include .com or .net etc.</p>
 </div>
 
 <div class="online-box">
   <p>🟢 <span id="count">0</span> online</p>
 </div>
 
-<script src="https://cdn.scaledrone.com/scaledrone.min.js"></script>
 <script>
-  const drone = new Scaledrone('XFwPn604jeNvOCyH');
-  drone.on('open', () => {
-    const room = drone.subscribe('observable-room');
-    room.on('members', members => {
-      document.getElementById('count').textContent = members.length;
+  function initScaledrone() {
+    if (typeof Scaledrone === 'undefined') { setTimeout(initScaledrone, 100); return; }
+    const drone = new Scaledrone('XFwPn604jeNvOCyH');
+    drone.on('open', () => {
+      const room = drone.subscribe('observable-room');
+      room.on('members', members => { document.getElementById('count').textContent = members.length; });
+      room.on('member_join', () => { document.getElementById('count').textContent = parseInt(document.getElementById('count').textContent) + 1; });
+      room.on('member_leave', () => { document.getElementById('count').textContent = parseInt(document.getElementById('count').textContent) - 1; });
     });
-    room.on('member_join', () => {
-      document.getElementById('count').textContent = parseInt(document.getElementById('count').textContent) + 1;
-    });
-    room.on('member_leave', () => {
-      document.getElementById('count').textContent = parseInt(document.getElementById('count').textContent) - 1;
-    });
-  });
+  }
+  initScaledrone();
 
   function normURL(raw) {
     raw = raw.trim();
@@ -350,10 +335,8 @@
   let currentURL = '';
   let blockTimer = null;
 
-  // Bookmarks
   function getBookmarks() {
-    try { return JSON.parse(localStorage.getItem('jg-bookmarks') || '[]'); } 
-    catch { return []; }
+    try { return JSON.parse(localStorage.getItem('jg-bookmarks') || '[]'); } catch { return []; }
   }
 
   function saveBookmarks(bm) {
@@ -367,12 +350,12 @@
     bm.forEach((b, i) => {
       const chip = document.createElement('div');
       chip.className = 'bookmark-chip';
-      chip.innerHTML = `<span onclick="loadSite('${b.url}')">${b.label}</span><span class="remove" onclick="removeBookmark(${i})">✕</span>`;
+      chip.innerHTML = `<span onclick="window.loadSite('${b.url}')">${b.label}</span><span class="remove" onclick="window.removeBookmark(${i})">✕</span>`;
       bar.appendChild(chip);
     });
   }
 
-  function addBookmark() {
+  window.addBookmark = function() {
     if (!currentURL) return;
     const bm = getBookmarks();
     const label = new URL(currentURL).hostname.replace('www.', '');
@@ -384,53 +367,39 @@
     setTimeout(() => document.getElementById('star-btn').textContent = '⭐', 1500);
   }
 
-  function removeBookmark(i) {
+  window.removeBookmark = function(i) {
     const bm = getBookmarks();
     bm.splice(i, 1);
     saveBookmarks(bm);
     renderBookmarks();
   }
 
-  function openSite() {
+  window.openSite = function() {
     const input = document.getElementById('url-input');
     const errEl = document.getElementById('error-msg');
     const parsed = normURL(input.value);
-
     errEl.style.display = 'none';
-
-    if (!parsed) {
-      errEl.textContent = 'Invalid URL.';
-      errEl.style.display = 'block';
-      return;
-    }
-
+    if (!parsed) { errEl.textContent = 'Invalid URL.'; errEl.style.display = 'block'; return; }
     currentURL = parsed.href;
-
     const frame = document.getElementById('site-frame');
     const overlay = document.getElementById('blocked-overlay');
     const viewer = document.getElementById('viewer');
     const launcher = document.getElementById('launcher');
-
     overlay.style.display = 'none';
     launcher.style.display = 'none';
     viewer.style.display = 'flex';
-
     clearTimeout(blockTimer);
-    blockTimer = setTimeout(() => {
-      overlay.style.display = 'flex';
-    }, 3000);
-
-
-
+    blockTimer = setTimeout(() => { overlay.style.display = 'flex'; }, 3000);
+    frame.onload = () => { clearTimeout(blockTimer); overlay.style.display = 'none'; };
     frame.src = currentURL;
   }
 
-  function loadSite(url) {
+  window.loadSite = function(url) {
     document.getElementById('url-input').value = url;
-    openSite();
+    window.openSite();
   }
 
-  function goBack() {
+  window.goBack = function() {
     const viewer = document.getElementById('viewer');
     const launcher = document.getElementById('launcher');
     const frame = document.getElementById('site-frame');
@@ -442,12 +411,10 @@
   }
 
   document.getElementById('url-input').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') openSite();
+    if (e.key === 'Enter') window.openSite();
   });
 
   renderBookmarks();
-
-
 </script>
 
 </body>
