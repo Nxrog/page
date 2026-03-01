@@ -10,7 +10,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #0a0a0a;
     overflow: hidden;
     font-family: 'Segoe UI', sans-serif;
   }
@@ -80,13 +79,8 @@
     transition: border 0.3s;
   }
 
-  .launcher input:focus {
-    border-color: white;
-  }
-
-  .launcher input::placeholder {
-    color: rgba(255,255,255,0.3);
-  }
+  .launcher input:focus { border-color: white; }
+  .launcher input::placeholder { color: rgba(255,255,255,0.3); }
 
   .btn {
     padding: 14px 60px;
@@ -149,10 +143,7 @@
     transition: all 0.2s;
   }
 
-  #topbar button:hover {
-    background: white;
-    color: black;
-  }
+  #topbar button:hover { background: white; color: black; }
 
   #site-frame {
     flex: 1;
@@ -229,9 +220,69 @@
     font-size: 18px;
     letter-spacing: 2px;
   }
+
+  /* Bookmarks */
+  #bookmarks-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    max-width: 500px;
+  }
+
+  .bookmark-chip {
+    padding: 5px 12px;
+    font-size: 13px;
+    color: white;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .bookmark-chip:hover { background: rgba(255,255,255,0.2); }
+
+  .bookmark-chip .remove {
+    opacity: 0.5;
+    font-size: 11px;
+    cursor: pointer;
+  }
+
+  .bookmark-chip .remove:hover { opacity: 1; color: #ff5555; }
+
+  #star-btn {
+    font-size: 18px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px 8px;
+    transition: transform 0.2s;
+  }
+
+  #star-btn:hover { transform: scale(1.3); }
 </style>
 </head>
 <body>
+
+<script>
+  // Random background color on each visit
+  const palettes = [
+    '#0a0a0a',
+    '#05050f',
+    '#050f05',
+    '#0f0505',
+    '#07050f',
+    '#0a080a',
+    '#050a0f',
+    '#0f0a05'
+  ];
+  const picked = palettes[Math.floor(Math.random() * palettes.length)];
+  document.body.style.background = picked;
+</script>
 
 <div class="shooting-star"></div>
 <div class="shooting-star"></div>
@@ -245,11 +296,13 @@
   <input id="url-input" type="text" placeholder="enter a website..." />
   <button class="btn" onclick="openSite()">OPEN</button>
   <span class="error" id="error-msg"></span>
+  <div id="bookmarks-bar"></div>
 </div>
 
 <div id="viewer">
   <div id="topbar">
     <button onclick="goBack()">← BACK</button>
+    <button id="star-btn" onclick="addBookmark()" title="Bookmark this site">⭐</button>
   </div>
   <iframe id="site-frame"></iframe>
   <div id="blocked-overlay">
@@ -260,9 +313,9 @@
 
 <div class="KYSVRO">
   <h5>Jasper-Gate</h5>
-  <p>Click yellow text to load them if they work.<br><br>
-  <a class="yellow" onclick="loadSite('https://math.ivannazarov.com/')">Use Truffled</a> for a more selection of games and is cool.<br>
-  <a class="yellow" onclick="loadSite('https://highschoolmathteachers.com/')">Use Froggie</a> Very cool for stuff like youtube but just only shorts and good games.<br>
+  <p>It takes me a bit to update for it to sync<br><br>
+     <a class="yellow" onclick="loadSite('https://math.ivannazarov.com/')">Use Truffled</a> for a more selection of games and is cool.<br>
+  <a class="yellow" onclick="loadSite('https://highschoolmathteachers.com')">Use Froggie</a> if you want youtube mainly or any other items.<br>
   <a class="yellow" onclick="loadSite('https://morrisonschool.max302.me/')">Use RammerHead(Browser)</a> for stuff froggie cannot do but include .com or .net etc.</p>
 </div>
 
@@ -295,6 +348,47 @@
 
   let currentURL = '';
   let blockTimer = null;
+
+  // Bookmarks
+  function getBookmarks() {
+    try { return JSON.parse(localStorage.getItem('jg-bookmarks') || '[]'); } 
+    catch { return []; }
+  }
+
+  function saveBookmarks(bm) {
+    try { localStorage.setItem('jg-bookmarks', JSON.stringify(bm)); } catch {}
+  }
+
+  function renderBookmarks() {
+    const bar = document.getElementById('bookmarks-bar');
+    const bm = getBookmarks();
+    bar.innerHTML = '';
+    bm.forEach((b, i) => {
+      const chip = document.createElement('div');
+      chip.className = 'bookmark-chip';
+      chip.innerHTML = `<span onclick="loadSite('${b.url}')">${b.label}</span><span class="remove" onclick="removeBookmark(${i})">✕</span>`;
+      bar.appendChild(chip);
+    });
+  }
+
+  function addBookmark() {
+    if (!currentURL) return;
+    const bm = getBookmarks();
+    const label = new URL(currentURL).hostname.replace('www.', '');
+    if (bm.find(b => b.url === currentURL)) return;
+    bm.push({ url: currentURL, label });
+    saveBookmarks(bm);
+    renderBookmarks();
+    document.getElementById('star-btn').textContent = '✅';
+    setTimeout(() => document.getElementById('star-btn').textContent = '⭐', 1500);
+  }
+
+  function removeBookmark(i) {
+    const bm = getBookmarks();
+    bm.splice(i, 1);
+    saveBookmarks(bm);
+    renderBookmarks();
+  }
 
   function openSite() {
     const input = document.getElementById('url-input');
@@ -346,11 +440,14 @@
     frame.src = '';
     viewer.style.display = 'none';
     launcher.style.display = 'flex';
+    document.getElementById('star-btn').textContent = '⭐';
   }
 
   document.getElementById('url-input').addEventListener('keydown', function(e) {
     if (e.key === 'Enter') openSite();
   });
+
+  renderBookmarks();
 </script>
 
 </body>
