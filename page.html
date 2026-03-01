@@ -306,7 +306,7 @@
   </div>
   <iframe id="site-frame"></iframe>
   <div id="blocked-overlay">
-    <p>This website cannot be embedded.<br>Try a different one!</p>
+    <p>This website cannot be embedded.<br>Try a different one that doesn't have anti Iframes ✌️</p>
     <button class="btn" onclick="goBack()" style="font-size:16px; padding:10px 30px;">← BACK</button>
   </div>
 </div>
@@ -420,9 +420,20 @@
     }, 3000);
 
     frame.onload = () => {
-      clearTimeout(blockTimer);
+  clearTimeout(blockTimer);
+  try {
+   
+    const doc = frame.contentDocument || frame.contentWindow.document;
+    if (!doc || doc.body.innerHTML === '') {
+      overlay.style.display = 'flex';
+    } else {
       overlay.style.display = 'none';
-    };
+    }
+  } catch(e) {
+  
+    overlay.style.display = 'flex';
+  }
+};
 
     frame.src = currentURL;
   }
@@ -449,21 +460,7 @@
 
   renderBookmarks();
 
- frame.onload = () => {
-  clearTimeout(blockTimer);
-  try {
-   
-    const doc = frame.contentDocument || frame.contentWindow.document;
-    if (!doc || doc.body.innerHTML === '') {
-      overlay.style.display = 'flex';
-    } else {
-      overlay.style.display = 'none';
-    }
-  } catch(e) {
-  
-    overlay.style.display = 'flex';
-  }
-};
+
 </script>
 
 </body>
