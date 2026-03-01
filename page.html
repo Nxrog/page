@@ -309,7 +309,7 @@
 </div>
 
 <div class="online-box">
-  <p>🟢 <span id="count">0</span> online</p>
+  <p>🟢 <span id="count">0</span> maybe online</p>
 </div>
 
 <script>
@@ -379,7 +379,7 @@
     const errEl = document.getElementById('error-msg');
     const parsed = normURL(input.value);
     errEl.style.display = 'none';
-    if (!parsed) { errEl.textContent = 'Invalid URL.'; errEl.style.display = 'block'; return; }
+    if (!parsed) { errEl.textContent = 'Not real try again bro'; errEl.style.display = 'block'; return; }
     currentURL = parsed.href;
     const frame = document.getElementById('site-frame');
     const overlay = document.getElementById('blocked-overlay');
