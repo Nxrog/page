@@ -269,7 +269,7 @@
 <body>
 
 <script>
-  // Random background color on each visit
+  
   const palettes = [
     '#0a0a0a',
     '#05050f',
@@ -452,7 +452,7 @@
  frame.onload = () => {
   clearTimeout(blockTimer);
   try {
-    // if we can access contentDocument it loaded fine
+   
     const doc = frame.contentDocument || frame.contentWindow.document;
     if (!doc || doc.body.innerHTML === '') {
       overlay.style.display = 'flex';
@@ -460,8 +460,7 @@
       overlay.style.display = 'none';
     }
   } catch(e) {
-    // cross-origin error means site loaded but blocked iframes
-    // this is actually a GOOD sign - site is there but restricted
+  
     overlay.style.display = 'flex';
   }
 };
