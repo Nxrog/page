@@ -301,7 +301,7 @@
     overflow: hidden;
     backdrop-filter: blur(20px);
     margin-bottom: 10px;
-    animation: chatOpen 0.3s ease;
+    animation: chatOpen 0.7s ease;
   }
 
   #chat-box { height: 380px; }
@@ -479,7 +479,7 @@
 </div>
 
 <div id="chat-widget">
-  <button id="chat-toggle" onclick="window.toggleChat()">💬 Chat</button>
+  <button id="chat-toggle" onclick="window.toggleChat()">Chat</button>
 
   <div id="name-prompt-box">
     <div class="chat-header">
@@ -494,7 +494,7 @@
 
   <div id="chat-box">
     <div class="chat-header">
-      <span id="chat-name"></span>
+      <span id="chat-name"><a style="color: yellow;" >Chat's do not save</a></span>
       <button onclick="window.toggleChat()">✕</button>
     </div>
     <div id="chat-messages"></div>
