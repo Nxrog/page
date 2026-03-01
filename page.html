@@ -211,8 +211,6 @@
     position: fixed;
     top: 20px;
     right: 20px;
-    bottom: auto;
-    left: auto;
     color: white;
     border: 1px solid rgba(255,255,255,0.3);
     border-radius: 8px;
@@ -224,137 +222,6 @@
     letter-spacing: 2px;
   }
 
- #chat-widget {
-  position: fixed;
-  bottom: 30px;
-  left: 20px;
-  z-index: 200;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-#chat-toggle {
-  padding: 10px 20px;
-  font-size: 15px;
-  color: white;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.3);
-  border-radius: 8px;
-  cursor: pointer;
-  backdrop-filter: blur(10px);
-  letter-spacing: 2px;
-  transition: all 0.3s;
-}
-
-#chat-toggle:hover { background: rgba(255,255,255,0.15); }
-
-#chat-box {
-  flex-direction: column;
-  width: 300px;
-  height: 380px;
-  background: rgba(10,10,10,0.95);
-  border: 1px solid rgba(255,255,255,0.15);
-  border-radius: 12px;
-  overflow: hidden;
-  backdrop-filter: blur(20px);
-  margin-bottom: 10px;
-  animation: chatOpen 0.3s ease;
-}
-
-@keyframes chatOpen {
-  0% { opacity: 0; transform: translateY(20px) scale(0.95); }
-  100% { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-#chat-header-main {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 14px;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-  font-size: 13px;
-  color: rgba(255,255,255,0.6);
-  letter-spacing: 2px;
-}
-
-#chat-messages {
-  flex: 1;
-  overflow-y: auto;
-  padding: 10px 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255,255,255,0.1) transparent;
-}
-
-.chat-msg {
-  font-size: 13px;
-  color: rgba(255,255,255,0.8);
-  line-height: 1.5;
-  word-break: break-word;
-}
-
-.chat-msg .name {
-  font-weight: bold;
-  margin-right: 6px;
-}
-
-.chat-msg.mine .name { color: #7eb8ff; }
-.chat-msg.other .name { color: #ffcc66; }
-
-.chat-msg.system {
-  color: rgba(255,255,255,0.3);
-  font-style: italic;
-  font-size: 11px;
-  text-align: center;
-}
-
-#chat-input-row {
-  display: flex;
-  border-top: 1px solid rgba(255,255,255,0.1);
-}
-
-#chat-input {
-  flex: 1;
-  background: transparent;
-  border: none;
-  padding: 10px 14px;
-  color: white;
-  font-size: 13px;
-  outline: none;
-}
-
-#chat-input::placeholder { color: rgba(255,255,255,0.2); }
-
-#chat-input-row button {
-  padding: 10px 14px;
-  background: transparent;
-  border: none;
-  border-left: 1px solid rgba(255,255,255,0.1);
-  color: white;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background 0.2s;
-}
-
-#chat-input-row button:hover { background: rgba(255,255,255,0.1); }
-
-.online-box {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  color: white;
-  border: 1px solid rgba(255,255,255,0.3);
-  border-radius: 8px;
-  padding: 10px 20px;
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(10px);
-  z-index: 1;
-  font-size: 18px;
-  letter-spacing: 2px;
-}
   #bookmarks-bar {
     display: flex;
     flex-wrap: wrap;
@@ -397,6 +264,171 @@
   }
 
   #star-btn:hover { transform: scale(1.3); }
+
+  /* Chat */
+  #chat-widget {
+    position: fixed;
+    bottom: 30px;
+    left: 20px;
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  #chat-toggle {
+    padding: 10px 20px;
+    font-size: 15px;
+    color: white;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 8px;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    letter-spacing: 2px;
+    transition: all 0.3s;
+  }
+
+  #chat-toggle:hover { background: rgba(255,255,255,0.15); }
+
+  #name-prompt-box, #chat-box {
+    display: none;
+    flex-direction: column;
+    width: 300px;
+    background: rgba(10,10,10,0.95);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 12px;
+    overflow: hidden;
+    backdrop-filter: blur(20px);
+    margin-bottom: 10px;
+    animation: chatOpen 0.3s ease;
+  }
+
+  #chat-box { height: 380px; }
+
+  @keyframes chatOpen {
+    0% { opacity: 0; transform: translateY(20px) scale(0.95); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+    letter-spacing: 2px;
+  }
+
+  .chat-header button {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 0;
+  }
+
+  #name-prompt-box .inner {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 20px 14px;
+  }
+
+  #name-prompt-box input {
+    padding: 10px 14px;
+    font-size: 14px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 6px;
+    color: white;
+    outline: none;
+    letter-spacing: 1px;
+  }
+
+  #name-prompt-box input::placeholder { color: rgba(255,255,255,0.3); }
+
+  #name-prompt-box .join-btn {
+    padding: 8px;
+    font-size: 14px;
+    font-weight: 900;
+    color: white;
+    background: transparent;
+    border: 2px solid white;
+    border-radius: 4px;
+    cursor: pointer;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    transition: all 0.3s;
+  }
+
+  #name-prompt-box .join-btn:hover { background: white; color: black; }
+
+  #chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.1) transparent;
+  }
+
+  .chat-msg {
+    font-size: 13px;
+    color: rgba(255,255,255,0.8);
+    line-height: 1.5;
+    word-break: break-word;
+  }
+
+  .chat-msg .name {
+    font-weight: bold;
+    margin-right: 6px;
+  }
+
+  .chat-msg.mine .name { color: #7eb8ff; }
+  .chat-msg.other .name { color: #ffcc66; }
+
+  .chat-msg.system {
+    color: rgba(255,255,255,0.3);
+    font-style: italic;
+    font-size: 11px;
+    text-align: center;
+  }
+
+  #chat-input-row {
+    display: flex;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+
+  #chat-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 10px 14px;
+    color: white;
+    font-size: 13px;
+    outline: none;
+  }
+
+  #chat-input::placeholder { color: rgba(255,255,255,0.2); }
+
+  #chat-input-row button {
+    padding: 10px 14px;
+    background: transparent;
+    border: none;
+    border-left: 1px solid rgba(255,255,255,0.1);
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.2s;
+  }
+
+  #chat-input-row button:hover { background: rgba(255,255,255,0.1); }
 </style>
 </head>
 <body>
@@ -416,15 +448,15 @@
 
 <div class="launcher" id="launcher">
   <input id="url-input" type="text" placeholder="enter a website..." />
-<button class="btn" onclick="openSite()">OPEN</button>
- <span class="error" id="error-msg"></span>
+  <button class="btn" onclick="window.openSite()">OPEN</button>
+  <span class="error" id="error-msg"></span>
   <div id="bookmarks-bar"></div>
 </div>
 
 <div id="viewer">
   <div id="topbar">
-   <button onclick="goBack()">← BACK</button>
-<button id="star-btn" onclick="addBookmark()">⭐</button>
+    <button onclick="window.goBack()">← BACK</button>
+    <button id="star-btn" onclick="window.addBookmark()">⭐</button>
   </div>
   <iframe id="site-frame"></iframe>
   <div id="blocked-overlay">
@@ -436,33 +468,34 @@
 <div class="KYSVRO">
   <h5>Some information for you because you might need it.</h5>
   <p>Click the yellow text for links to them, if they work, and if not be sad | since there is no proxy put in links that work with iframes not youtube.com<br><br>
- <a class="yellow" onclick="loadSite('https://math.ivannazarov.com/')">Use Truffled</a>
-<a class="yellow" onclick="loadSite('https://highschoolmathteachers.com')">Use Froggie</a>
-<a class="yellow" onclick="loadSite('https://morrisonschool.max302.me/')">Use RammerHead(Browser)</a>
+  <a class="yellow" onclick="window.loadSite('https://math.ivannazarov.com/')">Use Truffled</a> |
+  <a class="yellow" onclick="window.loadSite('https://highschoolmathteachers.com')">Use Froggie</a> |
+  <a class="yellow" onclick="window.loadSite('https://morrisonschool.max302.me/')">Use RammerHead(Browser)</a>
+  </p>
 </div>
 
 <div class="online-box">
   <p>🟢 <span id="count">0</span> maybe online</p>
 </div>
- 
+
 <div id="chat-widget">
   <button id="chat-toggle" onclick="window.toggleChat()">💬 Chat</button>
-  
-  <div id="name-prompt-box" style="display:none; flex-direction:column; width:300px; background:rgba(10,10,10,0.95); border:1px solid rgba(255,255,255,0.15); border-radius:12px; overflow:hidden; backdrop-filter:blur(20px); margin-bottom:10px; animation: chatOpen 0.3s ease;">
-    <div id="chat-header" style="display:flex; justify-content:space-between; align-items:center; padding:10px 14px; border-bottom:1px solid rgba(255,255,255,0.1);">
-      <span style="color:rgba(255,255,255,0.6); font-size:13px; letter-spacing:2px;">SET USERNAME</span>
-      <button onclick="window.toggleChat()" style="background:none;border:none;color:white;cursor:pointer;font-size:16px;">✕</button>
+
+  <div id="name-prompt-box">
+    <div class="chat-header">
+      <span>SET USERNAME</span>
+      <button onclick="window.toggleChat()">✕</button>
     </div>
-    <div style="display:flex; flex-direction:column; gap:12px; padding:20px 14px;">
-      <input id="name-input" type="text" maxlength="20" placeholder="enter a username..." style="padding:10px 14px; font-size:14px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.3); border-radius:6px; color:white; outline:none; letter-spacing:1px;"/>
-      <button onclick="window.saveName()" style="padding:8px; font-size:14px; font-weight:900; color:white; background:transparent; border:2px solid white; border-radius:4px; cursor:pointer; letter-spacing:3px; text-transform:uppercase; transition:all 0.3s;">JOIN</button>
+    <div class="inner">
+      <input id="name-input" type="text" maxlength="20" placeholder="enter a username..."/>
+      <button class="join-btn" onclick="window.saveName()">JOIN</button>
     </div>
   </div>
 
-  <div id="chat-box" style="display:none;">
-    <div id="chat-header-main">
+  <div id="chat-box">
+    <div class="chat-header">
       <span id="chat-name"></span>
-      <button onclick="window.toggleChat()" style="background:none;border:none;color:white;cursor:pointer;font-size:16px;">✕</button>
+      <button onclick="window.toggleChat()">✕</button>
     </div>
     <div id="chat-messages"></div>
     <div id="chat-input-row">
@@ -471,95 +504,55 @@
     </div>
   </div>
 </div>
+
 <script>
- function initScaledrone() {
-  if (typeof Scaledrone === 'undefined') { setTimeout(initScaledrone, 100); return; }
-  
-  const drone = new Scaledrone('XFwPn604jeNvOCyH');
-  
-  drone.on('open', () => {
-    const room = drone.subscribe('observable-room');
-    room.on('members', members => { document.getElementById('count').textContent = members.length; });
-    room.on('member_join', () => { document.getElementById('count').textContent = parseInt(document.getElementById('count').textContent) + 1; });
-    room.on('member_leave', () => { document.getElementById('count').textContent = parseInt(document.getElementById('count').textContent) - 1; });
+  let myName = localStorage.getItem('jg-username') || null;
+  let currentURL = '';
+  let blockTimer = null;
+  let _drone = null;
 
-    const chatRoom = drone.subscribe('chat-room');
-    chatRoom.on('message', (message) => {
-      const data = message.data;
-      const msgs = document.getElementById('chat-messages');
-      if (!msgs) return;
-      const div = document.createElement('div');
-      if (data.type === 'system') {
-        div.className = 'chat-msg system';
-        div.textContent = data.text;
-      } else {
-        const isMine = data.name === myName;
-        div.className = 'chat-msg ' + (isMine ? 'mine' : 'other');
-        div.innerHTML = `<span class="name">${data.name}</span>${data.text}`;
+  // Init Scaledrone
+  function initScaledrone() {
+    if (typeof Scaledrone === 'undefined') { setTimeout(initScaledrone, 100); return; }
+    _drone = new Scaledrone('XFwPn604jeNvOCyH');
+    _drone.on('open', () => {
+      // Online counter
+      const room = _drone.subscribe('observable-room');
+      room.on('members', members => { document.getElementById('count').textContent = members.length; });
+      room.on('member_join', () => { document.getElementById('count').textContent = parseInt(document.getElementById('count').textContent) + 1; });
+      room.on('member_leave', () => { document.getElementById('count').textContent = parseInt(document.getElementById('count').textContent) - 1; });
+
+      // Chat room
+      const chatRoom = _drone.subscribe('chat-room');
+      chatRoom.on('message', (message) => {
+        const data = message.data;
+        const msgs = document.getElementById('chat-messages');
+        if (!msgs) return;
+        const div = document.createElement('div');
+        if (data.type === 'system') {
+          div.className = 'chat-msg system';
+          div.textContent = data.text;
+        } else {
+          const isMine = data.name === myName;
+          div.className = 'chat-msg ' + (isMine ? 'mine' : 'other');
+          div.innerHTML = `<span class="name">${data.name}</span>${data.text}`;
+        }
+        msgs.appendChild(div);
+        msgs.scrollTop = msgs.scrollHeight;
+      });
+
+      // Announce join if name already set
+      if (myName) {
+        _drone.publish({ room: 'chat-room', message: { type: 'system', text: myName + ' joined 👋' } });
       }
-      msgs.appendChild(div);
-      msgs.scrollTop = msgs.scrollHeight;
     });
-
-    window._drone = drone;
-  });
-}
-
-let myName = localStorage.getItem('jg-username') || null;
-if (myName) document.getElementById('chat-name').textContent = '👤 ' + myName;
-
-window.saveName = function() {
-  const input = document.getElementById('name-input').value.trim();
-  if (!input) return;
-  localStorage.setItem('jg-username', input);
-  myName = input;
-  document.getElementById('chat-name').textContent = '👤 ' + myName;
-  document.getElementById('name-prompt-box').style.display = 'none';
-  document.getElementById('chat-box').style.display = 'flex';
-  if (window._drone) {
-    window._drone.publish({ room: 'chat-room', message: { type: 'system', text: input + ' joined 👋' } });
   }
-}
+  initScaledrone();
 
-window.toggleChat = function() {
-  const toggle = document.getElementById('chat-toggle');
-  const chatBox = document.getElementById('chat-box');
-  const nameBox = document.getElementById('name-prompt-box');
-  
-  const isOpen = chatBox.style.display === 'flex' || nameBox.style.display === 'flex';
-  
-  if (isOpen) {
-    chatBox.style.display = 'none';
-    nameBox.style.display = 'none';
-    toggle.style.display = 'block';
-  } else {
-    toggle.style.display = 'none';
-    if (!myName) {
-      nameBox.style.display = 'flex';
-    } else {
-      chatBox.style.display = 'flex';
-    }
-  }
-}
+  // Set name display if already saved
+  if (myName) document.getElementById('chat-name').textContent = '👤 ' + myName;
 
-window.sendMessage = function() {
-  const input = document.getElementById('chat-input');
-  const text = input.value.trim();
-  if (!text || !myName || !window._drone) return;
-  window._drone.publish({ room: 'chat-room', message: { type: 'msg', name: myName, text: text } });
-  input.value = '';
-}
-
-document.getElementById('chat-input') && document.getElementById('chat-input').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') window.sendMessage();
-});
-
-document.getElementById('name-input') && document.getElementById('name-input').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') window.saveName();
-});
-
-initScaledrone();
-
+  // URL normalization
   function normURL(raw) {
     raw = raw.trim();
     if (!raw) return null;
@@ -567,9 +560,7 @@ initScaledrone();
     try { return new URL(raw); } catch { return null; }
   }
 
-  let currentURL = '';
-  let blockTimer = null;
-
+  // Bookmarks
   function getBookmarks() {
     try { return JSON.parse(localStorage.getItem('jg-bookmarks') || '[]'); } catch { return []; }
   }
@@ -645,59 +636,58 @@ initScaledrone();
     document.getElementById('star-btn').textContent = '⭐';
   }
 
+  window.saveName = function() {
+    const input = document.getElementById('name-input').value.trim();
+    if (!input) return;
+    localStorage.setItem('jg-username', input);
+    myName = input;
+    document.getElementById('chat-name').textContent = '👤 ' + myName;
+    document.getElementById('name-prompt-box').style.display = 'none';
+    document.getElementById('chat-box').style.display = 'flex';
+    document.getElementById('chat-toggle').style.display = 'none';
+    if (_drone) _drone.publish({ room: 'chat-room', message: { type: 'system', text: input + ' joined 👋' } });
+  }
+
+  window.toggleChat = function() {
+    const toggle = document.getElementById('chat-toggle');
+    const chatBox = document.getElementById('chat-box');
+    const nameBox = document.getElementById('name-prompt-box');
+    const isOpen = chatBox.style.display === 'flex' || nameBox.style.display === 'flex';
+    if (isOpen) {
+      chatBox.style.display = 'none';
+      nameBox.style.display = 'none';
+      toggle.style.display = 'block';
+    } else {
+      toggle.style.display = 'none';
+      if (!myName) {
+        nameBox.style.display = 'flex';
+      } else {
+        chatBox.style.display = 'flex';
+      }
+    }
+  }
+
+  window.sendMessage = function() {
+    const input = document.getElementById('chat-input');
+    const text = input.value.trim();
+    if (!text || !myName || !_drone) return;
+    _drone.publish({ room: 'chat-room', message: { type: 'msg', name: myName, text: text } });
+    input.value = '';
+  }
+
   document.getElementById('url-input').addEventListener('keydown', function(e) {
     if (e.key === 'Enter') window.openSite();
   });
 
+  document.getElementById('name-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') window.saveName();
+  });
+
+  document.getElementById('chat-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') window.sendMessage();
+  });
+
   renderBookmarks();
-function getName() {
-  return localStorage.getItem('jg-username') || null;
-}
-
-window.saveName = function() {
-  const input = document.getElementById('name-input').value.trim();
-  if (!input) return;
-  localStorage.setItem('jg-username', input);
-  document.getElementById('name-prompt').style.display = 'none';
-  document.getElementById('chat-name').textContent = '👤 ' + input;
-  myName = input;
-  drone.publish({ room: 'chat-room', message: { type: 'system', text: input + ' joined' } });
-}
-
-let myName = getName();
-if (myName) {
-  document.getElementById('chat-name').textContent = '👤 ' + myName;
-} else {
-  document.getElementById('name-prompt').style.display = 'flex';
-}
-
-document.getElementById('name-input').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') window.saveName();
-});
-
-window.toggleChat = function() {
-  const box = document.getElementById('chat-box');
-  const toggle = document.getElementById('chat-toggle');
-  if (box.style.display === 'flex') {
-    box.style.display = 'none';
-    toggle.style.display = 'block';
-  } else {
-    box.style.display = 'flex';
-    toggle.style.display = 'none';
-  }
-}
-
-window.sendMessage = function() {
-  const input = document.getElementById('chat-input');
-  const text = input.value.trim();
-  if (!text) return;
-  drone.publish({ room: 'chat-room', message: { type: 'msg', name: myName, text: text } });
-  input.value = '';
-}
-
-document.getElementById('chat-input').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') window.sendMessage();
-});
 </script>
 
 </body>
