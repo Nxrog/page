@@ -154,12 +154,6 @@
     color: black;
   }
 
-  #topbar span {
-    color: rgba(255,255,255,0.4);
-    font-size: 13px;
-    letter-spacing: 1px;
-  }
-
   #site-frame {
     flex: 1;
     border: none;
@@ -183,6 +177,42 @@
     color: rgba(255,255,255,0.6);
     font-size: 18px;
     letter-spacing: 2px;
+    text-align: center;
+  }
+
+  .yellow {
+    color: yellow;
+    font-style: italic;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  .KYSVRO {
+    position: fixed;
+    bottom: 30px;
+    right: 20px;
+    color: white;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 8px;
+    padding: 15px 20px;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(10px);
+    z-index: 1;
+    max-width: 250px;
+  }
+
+  .KYSVRO h5 {
+    margin: 0 0 8px 0;
+    font-size: 20px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .KYSVRO p {
+    margin: 0;
+    font-size: 13px;
+    opacity: 0.7;
+    line-height: 1.5;
   }
 
   .online-box {
@@ -203,18 +233,6 @@
 </head>
 <body>
 
-<script>
-  const ALLOWED_DOMAINS = [
-    "highschoolmathteachers.com",
-    "4u8x9abm.rwapendlehill.com.au",
-    "morrisonschool.max302.me",
-    "amzn-s3-priorty.s3.us-east-2.amazonaws.com",
-    "neal.fun",
-    "scratch.mit.edu"
-    // add more domains here
-  ];
-</script>
-
 <div class="shooting-star"></div>
 <div class="shooting-star"></div>
 <div class="shooting-star"></div>
@@ -232,14 +250,20 @@
 <div id="viewer">
   <div id="topbar">
     <button onclick="goBack()">← BACK</button>
-    <button onclick="openNewTab()">↗ NEW TAB</button>
-    <span id="current-url-label"></span>
   </div>
   <iframe id="site-frame"></iframe>
   <div id="blocked-overlay">
-    <p>Cannot show this website (blocked from being embedded)</p>
-    <button class="btn" onclick="openNewTab()" style="font-size:16px; padding:10px 30px;">OPEN IN NEW TAB</button>
+    <p>This website cannot be embedded.<br>Try a different one!</p>
+    <button class="btn" onclick="goBack()" style="font-size:16px; padding:10px 30px;">← BACK</button>
   </div>
+</div>
+
+<div class="KYSVRO">
+  <h5>Jasper-Gate</h5>
+  <p>Click yellow text to load them if they work.<br><br>
+  <a class="yellow" onclick="loadSite('https://math.ivannazarov.com/')">Use Truffled</a> for a more selection of games and is cool.<br>
+  <a class="yellow" onclick="loadSite('https://highschoolmathteachers.com/')">Use Froggie</a> Very cool for stuff like youtube but just only shorts and good games.<br>
+  <a class="yellow" onclick="loadSite('https://morrisonschool.max302.me/')">Use RammerHead(Browser)</a> for stuff froggie cannot do but include .com or .net etc.</p>
 </div>
 
 <div class="online-box">
@@ -269,14 +293,6 @@
     try { return new URL(raw); } catch { return null; }
   }
 
-  function domainAllowed(hostname) {
-    hostname = hostname.replace(/^www\./, '');
-    return ALLOWED_DOMAINS.some(d => {
-      d = d.replace(/^www\./, '');
-      return hostname === d || hostname.endsWith('.' + d);
-    });
-  }
-
   let currentURL = '';
   let blockTimer = null;
 
@@ -293,14 +309,7 @@
       return;
     }
 
-    if (!domainAllowed(parsed.hostname)) {
-      errEl.textContent = 'Domain not in allowlist.';
-      errEl.style.display = 'block';
-      return;
-    }
-
     currentURL = parsed.href;
-    document.getElementById('current-url-label').textContent = parsed.hostname;
 
     const frame = document.getElementById('site-frame');
     const overlay = document.getElementById('blocked-overlay');
@@ -324,6 +333,11 @@
     frame.src = currentURL;
   }
 
+  function loadSite(url) {
+    document.getElementById('url-input').value = url;
+    openSite();
+  }
+
   function goBack() {
     const viewer = document.getElementById('viewer');
     const launcher = document.getElementById('launcher');
@@ -332,10 +346,6 @@
     frame.src = '';
     viewer.style.display = 'none';
     launcher.style.display = 'flex';
-  }
-
-  function openNewTab() {
-    window.open(currentURL, '_blank');
   }
 
   document.getElementById('url-input').addEventListener('keydown', function(e) {
