@@ -247,15 +247,12 @@
   transition: all 0.3s;
 }
 
-#chat-toggle:hover {
-  background: rgba(255,255,255,0.15);
-}
+#chat-toggle:hover { background: rgba(255,255,255,0.15); }
 
 #chat-box {
-  display: none;
   flex-direction: column;
   width: 300px;
-  height: 350px;
+  height: 380px;
   background: rgba(10,10,10,0.95);
   border: 1px solid rgba(255,255,255,0.15);
   border-radius: 12px;
@@ -270,7 +267,7 @@
   100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-#chat-header {
+#chat-header-main {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -287,7 +284,7 @@
   padding: 10px 14px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
   scrollbar-width: thin;
   scrollbar-color: rgba(255,255,255,0.1) transparent;
 }
@@ -295,19 +292,23 @@
 .chat-msg {
   font-size: 13px;
   color: rgba(255,255,255,0.8);
-  line-height: 1.4;
+  line-height: 1.5;
+  word-break: break-word;
 }
 
 .chat-msg .name {
-  color: white;
   font-weight: bold;
   margin-right: 6px;
 }
+
+.chat-msg.mine .name { color: #7eb8ff; }
+.chat-msg.other .name { color: #ffcc66; }
 
 .chat-msg.system {
   color: rgba(255,255,255,0.3);
   font-style: italic;
   font-size: 11px;
+  text-align: center;
 }
 
 #chat-input-row {
@@ -340,6 +341,20 @@
 
 #chat-input-row button:hover { background: rgba(255,255,255,0.1); }
 
+.online-box {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  color: white;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 8px;
+  padding: 10px 20px;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(10px);
+  z-index: 1;
+  font-size: 18px;
+  letter-spacing: 2px;
+}
   #bookmarks-bar {
     display: flex;
     flex-wrap: wrap;
@@ -430,41 +445,120 @@
   <p>🟢 <span id="count">0</span> maybe online</p>
 </div>
  
-<div id="name-prompt" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:300; align-items:center; justify-content:center; backdrop-filter:blur(10px);">
-  <div style="display:flex; flex-direction:column; align-items:center; gap:16px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.2); border-radius:12px; padding:40px 50px;">
-    <h3 style="color:white; letter-spacing:3px; text-transform:uppercase; font-family:'Segoe UI',sans-serif;">Enter your name</h3>
-    <input id="name-input" type="text" maxlength="20" placeholder="your name..." style="padding:12px 20px; font-size:16px; background:rgba(255,255,255,0.05); border:2px solid rgba(255,255,255,0.3); border-radius:6px; color:white; outline:none; letter-spacing:1px; width:250px;"/>
-    <button onclick="window.saveName()" style="padding:10px 40px; font-size:16px; font-weight:900; color:white; background:transparent; border:2px solid white; border-radius:4px; cursor:pointer; letter-spacing:3px; text-transform:uppercase; transition:all 0.3s;">SAVE</button>
-  </div>
-</div>
- 
- <div id="chat-widget">
+<div id="chat-widget">
   <button id="chat-toggle" onclick="window.toggleChat()">💬 Chat</button>
-  <div id="chat-box">
-    <div id="chat-header">
+  
+  <div id="name-prompt-box" style="display:none; flex-direction:column; width:300px; background:rgba(10,10,10,0.95); border:1px solid rgba(255,255,255,0.15); border-radius:12px; overflow:hidden; backdrop-filter:blur(20px); margin-bottom:10px; animation: chatOpen 0.3s ease;">
+    <div id="chat-header" style="display:flex; justify-content:space-between; align-items:center; padding:10px 14px; border-bottom:1px solid rgba(255,255,255,0.1);">
+      <span style="color:rgba(255,255,255,0.6); font-size:13px; letter-spacing:2px;">SET USERNAME</span>
+      <button onclick="window.toggleChat()" style="background:none;border:none;color:white;cursor:pointer;font-size:16px;">✕</button>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:12px; padding:20px 14px;">
+      <input id="name-input" type="text" maxlength="20" placeholder="enter a username..." style="padding:10px 14px; font-size:14px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.3); border-radius:6px; color:white; outline:none; letter-spacing:1px;"/>
+      <button onclick="window.saveName()" style="padding:8px; font-size:14px; font-weight:900; color:white; background:transparent; border:2px solid white; border-radius:4px; cursor:pointer; letter-spacing:3px; text-transform:uppercase; transition:all 0.3s;">JOIN</button>
+    </div>
+  </div>
+
+  <div id="chat-box" style="display:none;">
+    <div id="chat-header-main">
       <span id="chat-name"></span>
       <button onclick="window.toggleChat()" style="background:none;border:none;color:white;cursor:pointer;font-size:16px;">✕</button>
     </div>
     <div id="chat-messages"></div>
     <div id="chat-input-row">
-      <input id="chat-input" type="text" placeholder="say something..." maxlength="100"/>
+      <input id="chat-input" type="text" placeholder="say something..." maxlength="200"/>
       <button onclick="window.sendMessage()">↑</button>
     </div>
   </div>
 </div>
-
 <script>
-  function initScaledrone() {
-    if (typeof Scaledrone === 'undefined') { setTimeout(initScaledrone, 100); return; }
-    const drone = new Scaledrone('XFwPn604jeNvOCyH');
-    drone.on('open', () => {
-      const room = drone.subscribe('observable-room');
-      room.on('members', members => { document.getElementById('count').textContent = members.length; });
-      room.on('member_join', () => { document.getElementById('count').textContent = parseInt(document.getElementById('count').textContent) + 1; });
-      room.on('member_leave', () => { document.getElementById('count').textContent = parseInt(document.getElementById('count').textContent) - 1; });
+ function initScaledrone() {
+  if (typeof Scaledrone === 'undefined') { setTimeout(initScaledrone, 100); return; }
+  
+  const drone = new Scaledrone('XFwPn604jeNvOCyH');
+  
+  drone.on('open', () => {
+    const room = drone.subscribe('observable-room');
+    room.on('members', members => { document.getElementById('count').textContent = members.length; });
+    room.on('member_join', () => { document.getElementById('count').textContent = parseInt(document.getElementById('count').textContent) + 1; });
+    room.on('member_leave', () => { document.getElementById('count').textContent = parseInt(document.getElementById('count').textContent) - 1; });
+
+    const chatRoom = drone.subscribe('chat-room');
+    chatRoom.on('message', (message) => {
+      const data = message.data;
+      const msgs = document.getElementById('chat-messages');
+      if (!msgs) return;
+      const div = document.createElement('div');
+      if (data.type === 'system') {
+        div.className = 'chat-msg system';
+        div.textContent = data.text;
+      } else {
+        const isMine = data.name === myName;
+        div.className = 'chat-msg ' + (isMine ? 'mine' : 'other');
+        div.innerHTML = `<span class="name">${data.name}</span>${data.text}`;
+      }
+      msgs.appendChild(div);
+      msgs.scrollTop = msgs.scrollHeight;
     });
+
+    window._drone = drone;
+  });
+}
+
+let myName = localStorage.getItem('jg-username') || null;
+if (myName) document.getElementById('chat-name').textContent = '👤 ' + myName;
+
+window.saveName = function() {
+  const input = document.getElementById('name-input').value.trim();
+  if (!input) return;
+  localStorage.setItem('jg-username', input);
+  myName = input;
+  document.getElementById('chat-name').textContent = '👤 ' + myName;
+  document.getElementById('name-prompt-box').style.display = 'none';
+  document.getElementById('chat-box').style.display = 'flex';
+  if (window._drone) {
+    window._drone.publish({ room: 'chat-room', message: { type: 'system', text: input + ' joined 👋' } });
   }
-  initScaledrone();
+}
+
+window.toggleChat = function() {
+  const toggle = document.getElementById('chat-toggle');
+  const chatBox = document.getElementById('chat-box');
+  const nameBox = document.getElementById('name-prompt-box');
+  
+  const isOpen = chatBox.style.display === 'flex' || nameBox.style.display === 'flex';
+  
+  if (isOpen) {
+    chatBox.style.display = 'none';
+    nameBox.style.display = 'none';
+    toggle.style.display = 'block';
+  } else {
+    toggle.style.display = 'none';
+    if (!myName) {
+      nameBox.style.display = 'flex';
+    } else {
+      chatBox.style.display = 'flex';
+    }
+  }
+}
+
+window.sendMessage = function() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text || !myName || !window._drone) return;
+  window._drone.publish({ room: 'chat-room', message: { type: 'msg', name: myName, text: text } });
+  input.value = '';
+}
+
+document.getElementById('chat-input') && document.getElementById('chat-input').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') window.sendMessage();
+});
+
+document.getElementById('name-input') && document.getElementById('name-input').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') window.saveName();
+});
+
+initScaledrone();
 
   function normURL(raw) {
     raw = raw.trim();
