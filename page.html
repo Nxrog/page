@@ -436,6 +436,7 @@
   <div id="topbar">
     <button onclick="window.goBack()">← BACK</button>
     <button id="star-btn" onclick="window.addBookmark()">⭐</button>
+    <button id="blob-btn" onclick="window.toggleBlob()">🔲 Blob: OFF</button>
   </div>
   <iframe id="site-frame"></iframe>
 </div>
@@ -648,6 +649,36 @@
   });
 
   renderBookmarks();
+let blobMode = false;
+
+window.toggleBlob = function() {
+  blobMode = !blobMode;
+  document.getElementById('blob-btn').textContent = blobMode ? '🟦 Blob: ON' : '🔲 Blob: OFF';
+}
+
+window.openSite = function() {
+  const input = document.getElementById('url-input');
+  const errEl = document.getElementById('error-msg');
+  const parsed = normURL(input.value);
+  errEl.style.display = 'none';
+  if (!parsed) { errEl.textContent = 'Not real try again bro'; errEl.style.display = 'block'; return; }
+  currentURL = parsed.href;
+  if (blobMode) {
+    const html = `<!DOCTYPE html><html><head><title></title></head><body style="margin:0;padding:0;overflow:hidden;"><iframe src="${currentURL}" style="width:100vw;height:100vh;border:none;display:block;"></iframe></body></html>`;
+    const blob = new Blob([html], {type: 'text/html'});
+    window.open(URL.createObjectURL(blob), '_blank');
+    return;
+  }
+  const frame = document.getElementById('site-frame');
+  const viewer = document.getElementById('viewer');
+  const launcher = document.getElementById('launcher');
+  launcher.style.display = 'none';
+  viewer.style.display = 'flex';
+  frame.src = currentURL;
+}
+
+
+ 
 </script>
 
 </body>
