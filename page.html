@@ -152,26 +152,6 @@
     width: 100%;
   }
 
-  #blocked-overlay {
-    display: none;
-    position: absolute;
-    top: 40px; left: 0;
-    width: 100%; height: calc(100% - 40px);
-    background: #0a0a0a;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    z-index: 102;
-  }
-
-  #blocked-overlay p {
-    color: rgba(255,255,255,0.6);
-    font-size: 18px;
-    letter-spacing: 2px;
-    text-align: center;
-  }
-
   .yellow {
     color: yellow;
     font-style: italic;
@@ -265,7 +245,6 @@
 
   #star-btn:hover { transform: scale(1.3); }
 
-  /* Chat */
   #chat-widget {
     position: fixed;
     bottom: 30px;
@@ -489,7 +468,7 @@
 
   <div id="chat-box">
     <div class="chat-header">
-      <span id="chat-name"><a style="color: yellow;" >Chat's do not save</a></span>
+      <span id="chat-name"><a style="color: yellow;">Chats do not save</a></span>
       <button onclick="window.toggleChat()">✕</button>
     </div>
     <div id="chat-messages"></div>
@@ -503,21 +482,17 @@
 <script>
   let myName = localStorage.getItem('jg-username') || null;
   let currentURL = '';
-  let blockTimer = null;
   let _drone = null;
 
-  // Init Scaledrone
   function initScaledrone() {
     if (typeof Scaledrone === 'undefined') { setTimeout(initScaledrone, 100); return; }
     _drone = new Scaledrone('XFwPn604jeNvOCyH');
     _drone.on('open', () => {
-      // Online counter
       const room = _drone.subscribe('observable-room');
       room.on('members', members => { document.getElementById('count').textContent = members.length; });
       room.on('member_join', () => { document.getElementById('count').textContent = parseInt(document.getElementById('count').textContent) + 1; });
       room.on('member_leave', () => { document.getElementById('count').textContent = parseInt(document.getElementById('count').textContent) - 1; });
 
-      // Chat room
       const chatRoom = _drone.subscribe('chat-room');
       chatRoom.on('message', (message) => {
         const data = message.data;
@@ -536,7 +511,6 @@
         msgs.scrollTop = msgs.scrollHeight;
       });
 
-      // Announce join if name already set
       if (myName) {
         _drone.publish({ room: 'chat-room', message: { type: 'system', text: myName + ' joined 👋' } });
       }
@@ -544,10 +518,8 @@
   }
   initScaledrone();
 
-  // Set name display if already saved
   if (myName) document.getElementById('chat-name').textContent = '👤 ' + myName;
 
-  // URL normalization
   function normURL(raw) {
     raw = raw.trim();
     if (!raw) return null;
@@ -555,7 +527,6 @@
     try { return new URL(raw); } catch { return null; }
   }
 
-  // Bookmarks
   function getBookmarks() {
     try { return JSON.parse(localStorage.getItem('jg-bookmarks') || '[]'); } catch { return []; }
   }
@@ -603,15 +574,10 @@
     if (!parsed) { errEl.textContent = 'Not real try again bro'; errEl.style.display = 'block'; return; }
     currentURL = parsed.href;
     const frame = document.getElementById('site-frame');
-    const overlay = document.getElementById('blocked-overlay');
     const viewer = document.getElementById('viewer');
     const launcher = document.getElementById('launcher');
-    overlay.style.display = 'none';
     launcher.style.display = 'none';
     viewer.style.display = 'flex';
-    clearTimeout(blockTimer);
-    blockTimer = setTimeout(() => { overlay.style.display = 'flex'; }, 3000);
-    frame.onload = () => { clearTimeout(blockTimer); overlay.style.display = 'none'; };
     frame.src = currentURL;
   }
 
@@ -624,7 +590,6 @@
     const viewer = document.getElementById('viewer');
     const launcher = document.getElementById('launcher');
     const frame = document.getElementById('site-frame');
-    clearTimeout(blockTimer);
     frame.src = '';
     viewer.style.display = 'none';
     launcher.style.display = 'flex';
