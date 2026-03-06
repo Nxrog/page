@@ -427,7 +427,10 @@
 
 <div class="launcher" id="launcher">
   <input id="url-input" type="text" placeholder="enter a website..." />
-  <button class="btn" onclick="window.openSite()">OPEN</button>
+  <div style="display:flex; gap:10px; align-items:center;">
+    <button class="btn" onclick="window.openSite()">OPEN</button>
+    <button id="blob-btn" onclick="window.toggleBlob()" style="padding:14px 20px; font-size:14px; font-weight:900; color:white; background:transparent; border:2px solid rgba(255,255,255,0.4); border-radius:4px; cursor:pointer; letter-spacing:2px; transition:all 0.3s;">🔲 BLOB</button>
+  </div>
   <span class="error" id="error-msg"></span>
   <div id="bookmarks-bar"></div>
 </div>
@@ -436,7 +439,6 @@
   <div id="topbar">
     <button onclick="window.goBack()">← BACK</button>
     <button id="star-btn" onclick="window.addBookmark()">⭐</button>
-    <button id="blob-btn" onclick="window.toggleBlob()">🔲 Blob: OFF</button>
   </div>
   <iframe id="site-frame"></iframe>
 </div>
