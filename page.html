@@ -104,37 +104,32 @@
     box-shadow: 0 0 40px white;
   }
 
- .site-btn {
-  padding: 12px 18px;
-  background: #111;
-  border: 1px solid #2a2a2a;
-  border-radius: 8px;
-  color: #f5f5f5;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 0.6px;
-  text-align: left;
-  width: 100%;
+  .site-btn {
+    padding: 12px 18px;
+    background: #111;
+    border: 1px solid #2a2a2a;
+    border-radius: 8px;
+    color: #f5f5f5;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.6px;
+    text-align: left;
+    width: 100%;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  }
 
-  transition: 
-    background 0.2s ease,
-    border-color 0.2s ease,
-    transform 0.15s ease,
-    box-shadow 0.2s ease;
-}
+  .site-btn:hover {
+    background: #1a1a1a;
+    border-color: rgba(255, 230, 0, 0.6);
+    box-shadow: 0 0 12px rgba(255, 230, 0, 0.25);
+    transform: translateY(-2px);
+  }
 
-.site-btn:hover {
-  background: #1a1a1a;
-  border-color: rgba(255, 230, 0, 0.6);
-  box-shadow: 0 0 12px rgba(255, 230, 0, 0.25);
-  transform: translateY(-2px);
-}
-
-.site-btn:active {
-  transform: translateY(0);
-  box-shadow: inset 0 2px 6px rgba(0,0,0,0.5);
-}
+  .site-btn:active {
+    transform: translateY(0);
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.5);
+  }
 
   .error {
     color: #ff5555;
@@ -184,13 +179,6 @@
     width: 100%;
   }
 
-  .yellow {
-    color: yellow;
-    font-style: italic;
-    cursor: pointer;
-    text-decoration: underline;
-  }
-
   .KYSVRO {
     position: fixed;
     bottom: 30px;
@@ -213,7 +201,7 @@
   }
 
   .KYSVRO p {
-    margin: 0;
+    margin: 0 0 12px 0;
     font-size: 13px;
     opacity: 0.7;
     line-height: 1.5;
@@ -478,14 +466,13 @@
 <div class="KYSVRO">
   <h5>Some information for you because you might need it.</h5>
   <p>Since there is no proxy put in links that work with iframes not youtube.com</p>
-  <div style="display:flex; flex-direction:column; gap:8px; margin-top:12px;">
-    <button class="site-btn" onclick="window.loadSite('https://math.ivannazarov.com/')"> Truffled</button>
-    <button class="site-btn" onclick="window.loadSite('https://play.frogiee1.net/')"> Froggie</button>
-    <button class="site-btn" onclick="window.loadSite('https://yinandyang.twilightparadox.com/')"> Utopia</button>
-   <button class="site-btn" onclick="window.loadSite('https://s3.amazonaws.com/shindoisbest/index.html')"> GN-math</button>
+  <div style="display:flex; flex-direction:column; gap:8px;">
+    <button class="site-btn" onclick="window.loadSite('https://math.ivannazarov.com/')">Truffled</button>
+    <button class="site-btn" onclick="window.loadSite('https://play.frogiee1.net/')">Froggie</button>
+    <button class="site-btn" onclick="window.loadSite('https://yinandyang.twilightparadox.com/')">Utopia</button>
+    <button class="site-btn" onclick="window.loadSite('https://s3.amazonaws.com/shindoisbest/index.html')">GN-math</button>
   </div>
 </div>
-
 
 <div class="online-box">
   <p>🟢 <span id="count">0</span> maybe online</p>
@@ -506,7 +493,7 @@
 
   <div id="chat-box">
     <div class="chat-header">
-      <span id="chat-name"><a style="color: yellow;">Chats do not save</a></span>
+      <span id="chat-name"><a style="color:yellow;">Chats do not save</a></span>
       <button onclick="window.toggleChat()">✕</button>
     </div>
     <div id="chat-messages"></div>
@@ -521,6 +508,7 @@
   let myName = localStorage.getItem('jg-username') || null;
   let currentURL = '';
   let _drone = null;
+  let blobMode = false;
 
   function initScaledrone() {
     if (typeof Scaledrone === 'undefined') { setTimeout(initScaledrone, 100); return; }
@@ -604,6 +592,13 @@
     renderBookmarks();
   }
 
+  window.toggleBlob = function() {
+    blobMode = !blobMode;
+    const btn = document.getElementById('blob-btn');
+    btn.textContent = blobMode ? '🟦 BLOB: ON' : '🔲 BLOB';
+    btn.style.borderColor = blobMode ? 'rgba(100,150,255,0.8)' : 'rgba(255,255,255,0.4)';
+  }
+
   window.openSite = function() {
     const input = document.getElementById('url-input');
     const errEl = document.getElementById('error-msg');
@@ -611,6 +606,12 @@
     errEl.style.display = 'none';
     if (!parsed) { errEl.textContent = 'Not real try again bro'; errEl.style.display = 'block'; return; }
     currentURL = parsed.href;
+    if (blobMode) {
+      const html = `<!DOCTYPE html><html><head><title></title></head><body style="margin:0;padding:0;overflow:hidden;"><iframe src="${currentURL}" style="width:100vw;height:100vh;border:none;display:block;"></iframe></body></html>`;
+      const blob = new Blob([html], {type: 'text/html'});
+      window.open(URL.createObjectURL(blob), '_blank');
+      return;
+    }
     const frame = document.getElementById('site-frame');
     const viewer = document.getElementById('viewer');
     const launcher = document.getElementById('launcher');
@@ -686,36 +687,6 @@
   });
 
   renderBookmarks();
-let blobMode = false;
-
-window.toggleBlob = function() {
-  blobMode = !blobMode;
-  document.getElementById('blob-btn').textContent = blobMode ? '🟦 Blob: ON' : '🔲 Blob: OFF';
-}
-
-window.openSite = function() {
-  const input = document.getElementById('url-input');
-  const errEl = document.getElementById('error-msg');
-  const parsed = normURL(input.value);
-  errEl.style.display = 'none';
-  if (!parsed) { errEl.textContent = 'Not real try again bro'; errEl.style.display = 'block'; return; }
-  currentURL = parsed.href;
-  if (blobMode) {
-    const html = `<!DOCTYPE html><html><head><title></title></head><body style="margin:0;padding:0;overflow:hidden;"><iframe src="${currentURL}" style="width:100vw;height:100vh;border:none;display:block;"></iframe></body></html>`;
-    const blob = new Blob([html], {type: 'text/html'});
-    window.open(URL.createObjectURL(blob), '_blank');
-    return;
-  }
-  const frame = document.getElementById('site-frame');
-  const viewer = document.getElementById('viewer');
-  const launcher = document.getElementById('launcher');
-  launcher.style.display = 'none';
-  viewer.style.display = 'flex';
-  frame.src = currentURL;
-}
-
-
- 
 </script>
 
 </body>
