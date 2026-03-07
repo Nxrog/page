@@ -104,6 +104,25 @@
     box-shadow: 0 0 40px white;
   }
 
+ .site-btn {
+  padding: 8px 16px;
+  background: rgba(255,255,0,0.08);
+  border: 1px solid rgba(255,255,0,0.5);
+  border-radius: 6px;
+  color: yellow;
+  cursor: pointer;
+  font-size: 13px;
+  letter-spacing: 1px;
+  text-align: left;
+  transition: all 0.2s;
+  width: 100%;
+}
+
+.site-btn:hover {
+  background: rgba(255,255,0,0.2);
+  box-shadow: 0 0 10px rgba(255,255,0,0.2);
+}
+
   .error {
     color: #ff5555;
     font-size: 14px;
@@ -445,12 +464,14 @@
 
 <div class="KYSVRO">
   <h5>Some information for you because you might need it.</h5>
-  <p>Click the yellow text for links to them, if they work, and if not be sad | since there is no proxy put in links that work with iframes not youtube.com<br><br>
-  <a class="yellow" onclick="window.loadSite('https://math.ivannazarov.com/')">Use Truffled</a> |
-  <a class="yellow" onclick="window.loadSite('https://play.frogiee1.net/')">Use Froggie</a> |
-  <a class="yellow" onclick="window.loadSite('https://2603moon.firebaseapp.com/')">Use Cloud(AAA and AA games.)</a>
-  </p>
+  <p>Since there is no proxy put in links that work with iframes not youtube.com</p>
+  <div style="display:flex; flex-direction:column; gap:8px; margin-top:12px;">
+    <button class="site-btn" onclick="window.loadSite('https://math.ivannazarov.com/')">⚡ Truffled</button>
+    <button class="site-btn" onclick="window.loadSite('https://play.frogiee1.net/')">🐸 Froggie</button>
+    <button class="site-btn" onclick="window.loadSite('https://2603moon.firebaseapp.com/')">☁️ Cloud (AAA & AA games)</button>
+  </div>
 </div>
+
 
 <div class="online-box">
   <p>🟢 <span id="count">0</span> maybe online</p>
